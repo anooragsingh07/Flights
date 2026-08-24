@@ -4,8 +4,8 @@
 const { StatusCodes } = require('http-status-codes');
 
 const { AirplaneService } = require('../services');
-const { ForeignKeyConstraintError, Model } = require('sequelize');
-const { response } = require('express');
+
+const { SuccessResponse, ErrorResponse } = require('../utils/common');
 
 /**
  * POST : /airplane
@@ -19,22 +19,22 @@ async function createAirplane(req, res) {
             capacity: req.body.capacity
         });
 
+        SuccessResponse.data = airplane;
+
         return res
             .status(StatusCodes.CREATED)
-            .json({
-                success: true,
-                message: 'Successfully create an airplane',
-                data: airplane,
-                error: {}
-            });
+            .json(SuccessResponse);
+
     } catch (error) {
         return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
             .json({
                 success: false,
-                message: 'Something went wrong while creating airplane',
+                message: error.message || 'Something went wrong while creating airplane',
                 data: {},
-                error: error
+                error: {
+                    explanation: error.explanation || error.message
+                }
             });
     }
 }
