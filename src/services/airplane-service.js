@@ -34,7 +34,20 @@ async function getAirplanes() {
     }
 }
 
+async function updateAirplane(id, data) {
+    try {
+        const airplane = await airplaneRepository.update(id, data);
+        if (!airplane || airplane[0] === 0) {
+            throw new AppError('Airplane not found', StatusCodes.NOT_FOUND);
+        }
+        return airplane;
+    } catch(error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createAirplane,
-    getAirplanes
+    getAirplanes,
+    updateAirplane
 }

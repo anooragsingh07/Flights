@@ -14,6 +14,9 @@ router.post(
 // /api/v1/airplanes GET
 router.get('/', AirplaneController.getAirplanes);
 
+// /api/v1/airplanes/:id PATCH
+router.patch('/:id', AirplaneController.updateAirplane);
+
 module.exports = router;
 
 /**
