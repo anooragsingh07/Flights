@@ -48,6 +48,10 @@ async function getAirplanes(req, res) {
     }
 }
 
+/**
+ * PATCH : /airplanes/:id
+ * req-body {capacity: 250}
+ */
 async function updateAirplane(req, res) {
     try {
         const airplane = await AirplaneService.updateAirplane(req.params.id, {
@@ -70,7 +74,26 @@ async function updateAirplane(req, res) {
  */
 async function getAirplane(req, res) {
     try {
-        const airplanes = await AirplaneService.getAirplane(req.params.id);
+        const airplane = await AirplaneService.getAirplane(req.params.id);
+        SuccessResponse.data = airplane;
+        return res
+                .status(StatusCodes.OK)
+                .json(SuccessResponse);
+    } catch(error) {
+        ErrorResponse.error = error;
+        return res
+                .status(error.statusCode)
+                .json(ErrorResponse);
+    }
+}
+
+/**
+ * DELETE : /airplanes/:id
+ * req-body {}
+ */
+async function destroyAirplane(req, res) {
+    try {
+        const airplanes = await AirplaneService.destroyAirplane(req.params.id);
         SuccessResponse.data = airplanes;
         return res
                 .status(StatusCodes.OK)
@@ -86,6 +109,7 @@ async function getAirplane(req, res) {
 module.exports = {
     createAirplane,
     getAirplanes,
+    updateAirplane,
     getAirplane,
-    updateAirplane
+    destroyAirplane
 }
